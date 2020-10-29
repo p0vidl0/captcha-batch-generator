@@ -1,7 +1,6 @@
-# Stoled dfrom https://github.com/mbi/django-simple-captcha
+# Inspired by https://github.com/mbi/django-simple-captcha
 
 import os
-import six
 import random
 import itertools
 
@@ -12,7 +11,6 @@ try:
 except ImportError:
     from io import BytesIO as StringIO
 
-LETTERS = 4
 CAPTCHA_LETTER_ROTATION = (-35, 35)
 CAPTCHA_BACKGROUND_COLOR = "#ffffff"
 CAPTCHA_FOREGROUND_COLOR = "#001100"
@@ -154,28 +152,16 @@ def captcha_image(text, scale=1):
         image = f(image)
 
     out = StringIO()
-    if text == 'AUX':
-        text = '_AUX'
-    elif text == 'COM':
-        text = '_COM'
-    elif text == 'CON':
-        text = '_CON'
-    elif text == 'PRN':
-        text = '_PRN'
+    if len(text) == 3 :
+        if text == 'AUX':
+            text = '_AUX'
+        elif text == 'COM':
+            text = '_COM'
+        elif text == 'CON':
+            text = '_CON'
+        elif text == 'PRN':
+            text = '_PRN'
     image.save('images/' + text + '.png', "PNG")
     out.seek(0)
-    #
-    # response = HttpResponse(content_type="image/png")
-    # response.write(out.read())
-    # response["Content-length"] = out.tell()
 
     return text
-
-#
-
-letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-for i in itertools.product(letters, repeat=LETTERS):
-    code = ''.join(i)
-    captcha_image(code)
-    print(code + ' generated')
